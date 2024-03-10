@@ -24,6 +24,7 @@
 
     <build>
         <plugins>
+            <!--maven生命周期插件-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -33,6 +34,27 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <!--生成jar：复制依赖-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>
+                                ${project.build.directory}/libs
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--生成jar：打包-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -41,13 +63,13 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <classpathPrefix/>
+                            <classpathPrefix>libs/</classpathPrefix>>
                             <mainClass>org.example.aspectjDemo.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
-
+            <!--aspectj织入处理脚本-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
